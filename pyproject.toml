@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "주가 수집"
+version = "0.1.0"
+description = "주가 수집 패키지 의존성 관리"
+authors = ["yera <yera9410@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+finance-datareader = "^0.9.50"
+pandas = "^2.0.3"
+selenium = "^4.10.0"
+numpy = "^1.25.0"
+beautifulsoup4 = "^4.12.2"
+webdriver-manager = "^3.8.6"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.24.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
