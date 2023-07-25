@@ -6,7 +6,7 @@ authors = ["yera <yera9410@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.9"
 finance-datareader = "^0.9.50"
 pandas = "^2.0.3"
 selenium = "^4.10.0"

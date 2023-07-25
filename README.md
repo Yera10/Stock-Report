@@ -10,7 +10,7 @@ $ (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Co
 $ curl -sSL https://install.python-poetry.org | python3 -
 
 # Poetry 환경변수에 등록하기
-# Poetry 위치 : C:\Users\SEJONG\AppData\Roaming\Python\Scripts\
+# Poetry 위치 : C:\Users\사용자명\AppData\Roaming\Python\Scripts\
 
 # 프로젝트 폴더 내에 가상환경을 저장
 $ poetry config virtualenvs.in-project true 
