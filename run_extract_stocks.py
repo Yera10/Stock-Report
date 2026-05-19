@@ -13,7 +13,7 @@ from core.matcher import match_ticker
 
 load_dotenv()
 
-DB_COLS = ["YT_VIDEOID", "EXPERT_NAME", "TICKER", "STOCK_NAME", "OPINION",
+DB_COLS = ["YT_VIDEOID", "EXPERT_NAME", "TICKER", "STOCK_NAME_EXTRACTED", "STOCK_NAME", "OPINION",
            "CURRENT_PRICE", "TARGET_PRICE", "SELLOFF_PRICE", "REASON", "TIMESTAMPED_LINK"]
 
 
@@ -31,8 +31,13 @@ if __name__ == "__main__":
     df = extract_stocks(transcript, segments, video_id)
 
     # TICKER 보강
-    df_stocks = pd.read_sql("SELECT TICKER, STOCK_NAME FROM master_stocks", engine)
-    df = match_ticker(df, df_stocks)
+    master_stocks = pd.read_sql("SELECT TICKER, STOCK_NAME, STOCK_NAME_NORM FROM master_stocks", engine)
+    mask = df["TICKER"].isna()
+    if mask.any():
+        matched = match_ticker(df.loc[mask, "STOCK_NAME_EXTRACTED"].tolist(), master_stocks)
+        tickers, normed_names = zip(*matched)
+        df.loc[mask, "TICKER"] = tickers
+        df.loc[mask, "STOCK_NAME"] = normed_names
 
     print(f"\n{'='*60}")
     print(df)

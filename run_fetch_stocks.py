@@ -4,6 +4,7 @@ import FinanceDataReader as fdr
 from sqlalchemy import text
 from dotenv import load_dotenv
 from core.db import get_engine
+from core.matcher import normalize
 
 load_dotenv()
 
@@ -13,6 +14,7 @@ if __name__ == "__main__":
     df = fdr.StockListing("KRX")[["Code", "Name", "Market"]]
     df.columns = ["TICKER", "STOCK_NAME", "MARKET"]
     df = df[df["TICKER"].notna() & df["STOCK_NAME"].notna()].drop_duplicates("TICKER")
+    df["STOCK_NAME_NORM"] = df["STOCK_NAME"].map(normalize)
     print(f"총 {len(df)}개 종목")
 
     engine = get_engine()

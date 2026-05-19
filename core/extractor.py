@@ -11,7 +11,7 @@ SYSTEM_PROMPT = """주어진 텍스트를 분석하여 언급된 모든 추천 �
 [
   {
     "EXPERT_NAME": "추천자 (있으면)",
-    "STOCK_NAME": "종목명",
+    "STOCK_NAME_EXTRACTED": "종목명",
     "TICKER": "종목코드 (있으면, 없으면 null)",
     "OPINION": "매수/상향조정/하향조정 (있으면)",
     "TARGET_PRICE": 목표가_숫자 (원 단위, 없으면 null),
