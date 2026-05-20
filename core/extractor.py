@@ -33,8 +33,6 @@ def extract_stocks(transcript: str, segments: list[dict], video_id: str) -> pd.D
     """자막 텍스트 → 추천주 DataFrame (Claude API)"""
     formatted = format_with_timestamps(segments) if segments else transcript
 
-    print(formatted[:5000])
-
     client = anthropic.Anthropic()
     message = client.messages.create(
         model="claude-haiku-4-5",
@@ -45,9 +43,12 @@ def extract_stocks(transcript: str, segments: list[dict], video_id: str) -> pd.D
 
     raw = message.content[0].text.strip()
     json_match = re.search(r"\[.*\]", raw, re.DOTALL)
+    
     stocks = json.loads(json_match.group() if json_match else raw)
 
     df = pd.DataFrame(stocks)
+    if df.empty:
+        return df
     df["YT_VIDEOID"] = video_id
     df["TIMESTAMPED_LINK"] = df["START_SECONDS"].apply(
         lambda t: f"https://www.youtube.com/watch?v={video_id}&t={int(t)}" if pd.notna(t) else None

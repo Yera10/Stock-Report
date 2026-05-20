@@ -1,8 +1,21 @@
+import os
+import requests
 from youtube_transcript_api import YouTubeTranscriptApi
+
+
+def _build_api() -> YouTubeTranscriptApi:
+    session = requests.Session()
+
+    proxy_url = os.environ.get("PROXY_URL")
+    if proxy_url:
+        session.proxies = {"http": proxy_url, "https": proxy_url}
+
+    return YouTubeTranscriptApi(http_client=session)
+
 
 def get_transcript(video_id: str) -> tuple[str, list[dict]]:
     """YouTube 자막 가져오기. Returns: (전체 텍스트, 세그먼트 리스트)"""
-    api = YouTubeTranscriptApi()
+    api = _build_api()
     transcript_list = api.list(video_id)
 
     try:

@@ -31,20 +31,23 @@ if __name__ == "__main__":
     print("[3/3] Claude 분석 중...")
     df = extract_stocks(transcript, segments, video_id)
 
-    # TICKER 보강
-    master_stocks = pd.read_sql("SELECT TICKER, STOCK_NAME, STOCK_NAME_NORM FROM master_stocks", engine)
-    mask = df["TICKER"].isna()
-    if mask.any():
-        matched = match_ticker(df.loc[mask, "STOCK_NAME_EXTRACTED"].tolist(), master_stocks)
-        tickers, normed_names = zip(*matched)
-        df.loc[mask, "TICKER"] = tickers
-        df.loc[mask, "STOCK_NAME"] = normed_names
+    if df.empty:
+        print("추천 종목이 없음")
+    else:
+        # TICKER 보강
+        master_stocks = pd.read_sql("SELECT TICKER, STOCK_NAME, STOCK_NAME_NORM FROM master_stocks", engine)
+        mask = df["TICKER"].isna()
+        if mask.any():
+            matched = match_ticker(df.loc[mask, "STOCK_NAME_EXTRACTED"].tolist(), master_stocks)
+            tickers, normed_names = zip(*matched)
+            df.loc[mask, "TICKER"] = tickers
+            df.loc[mask, "STOCK_NAME"] = normed_names
 
-    print(f"\n{'='*60}")
-    print(df)
+        print(f"\n{'='*60}")
+        print(df)
 
-    # DB INSERT
-    df[DB_COLS].to_sql("extracted_stocks", engine, if_exists="append", index=False, method=insert_ignore)
+        # DB INSERT
+        df[DB_COLS].to_sql("extracted_stocks", engine, if_exists="append", index=False, method=insert_ignore)
 
     # EXTRACTED 플래그 업데이트
     with engine.begin() as conn:
