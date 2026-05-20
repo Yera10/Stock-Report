@@ -1,5 +1,4 @@
-from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled
-
+from youtube_transcript_api import YouTubeTranscriptApi
 
 def get_transcript(video_id: str) -> tuple[str, list[dict]]:
     """YouTube 자막 가져오기. Returns: (전체 텍스트, 세그먼트 리스트)"""

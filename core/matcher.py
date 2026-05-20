@@ -13,7 +13,7 @@ def normalize(name: str) -> str:
     return name.upper()
 
 
-def match_ticker(stock_names: list[str], master_stocks: pd.DataFrame) -> list[tuple[str | None, str]]:
+def match_ticker(extracted_names: list[str], master_stocks: pd.DataFrame) -> list[tuple[str | None, str]]:
     """추출한 종목명에 맞는 TICKER 매칭하는 함수"""
     norm_to_ticker = dict(zip(master_stocks["STOCK_NAME_NORM"], master_stocks["TICKER"]))
     norm_to_name   = dict(zip(master_stocks["STOCK_NAME_NORM"], master_stocks["STOCK_NAME"]))
@@ -21,8 +21,8 @@ def match_ticker(stock_names: list[str], master_stocks: pd.DataFrame) -> list[tu
 
     # TICKER 매칭
     results = []
-    for name in stock_names:
-        norm = normalize(name)
+    for ext in extracted_names:
+        norm = normalize(ext)
 
         # 정규화 매칭
         if norm in norm_to_ticker:
@@ -34,6 +34,6 @@ def match_ticker(stock_names: list[str], master_stocks: pd.DataFrame) -> list[tu
         if hit:
             results.append((norm_to_ticker[hit[0]], norm_to_name[hit[0]]))
         else:
-            results.append((None, name))
+            results.append((None, None))
 
     return results
