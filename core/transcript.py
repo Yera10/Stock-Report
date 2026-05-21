@@ -3,6 +3,7 @@ import time
 from pathlib import Path
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.proxies import GenericProxyConfig
+from youtube_transcript_api._errors import VideoUnplayable
 
 PROXY_STATE_FILE = Path(__file__).parent.parent / ".proxy_state"
 
@@ -50,6 +51,8 @@ def get_transcript(video_id: str) -> tuple[str, list[dict]]:
             result = _fetch_transcript(_build_youtube_api(proxy_urls[idx]), video_id)
             _save_index(idx)
             return result
+        except VideoUnplayable:
+            raise
         except Exception as e:
             print(f"  프록시 {idx + 1} 실패 ({e.__class__.__name__})")
     raise RuntimeError("모든 프록시 실패")
