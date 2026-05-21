@@ -45,7 +45,7 @@ def fetch_new_videos(channel_id: str, published_after: str) -> list[dict]:
 if __name__ == "__main__":
     engine = get_engine()
     df_channels = pd.read_sql("SELECT CHANNEL_ID FROM MASTER_youtuber", engine)
-    since = (pd.Timestamp.now(tz="UTC") - pd.Timedelta(hours=1)).floor("h").strftime("%Y-%m-%dT%H:%M:%SZ")
+    since = (pd.Timestamp.now(tz="UTC") - pd.Timedelta(hours=2)).floor("h").strftime("%Y-%m-%dT%H:%M:%SZ")
 
     for channel_id in df_channels["CHANNEL_ID"]:
         videos = fetch_new_videos(channel_id, since)
