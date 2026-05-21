@@ -1,20 +1,24 @@
 import os
-import requests
+import time
 from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api.proxies import GenericProxyConfig
 
 
 def _build_api() -> YouTubeTranscriptApi:
-    session = requests.Session()
-
     proxy_url = os.environ.get("PROXY_URL")
     if proxy_url:
-        session.proxies = {"http": proxy_url, "https": proxy_url}
-
-    return YouTubeTranscriptApi(http_client=session)
+        return YouTubeTranscriptApi(
+            proxy_config=GenericProxyConfig(
+                http_url=proxy_url,
+                https_url=proxy_url,
+            )
+        )
+    return YouTubeTranscriptApi()
 
 
 def get_transcript(video_id: str) -> tuple[str, list[dict]]:
-    """YouTube 자막 가져오기. Returns: (전체 텍스트, 세그먼트 리스트)"""
+    """YouTube 자막 가져오기."""
+    time.sleep(1)  # API rate limit 방지 위해 약간의 딜레이
     api = _build_api()
     transcript_list = api.list(video_id)
 
