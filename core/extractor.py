@@ -36,7 +36,7 @@ def extract_stocks(transcript: str, segments: list[dict], video_id: str) -> pd.D
     client = anthropic.Anthropic()
     message = client.messages.create(
         model="claude-haiku-4-5",
-        max_tokens=2048,
+        max_tokens=4096,
         system=SYSTEM_PROMPT,
         messages=[{"role": "user", "content": f"다음 방송 텍스트에서 추천 종목과 목표가를 추출해주세요:\n\n{formatted[:]}"}],
     )
